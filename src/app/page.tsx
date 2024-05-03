@@ -1,17 +1,18 @@
 "use client";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { getEmojis, Emoji } from "unicode-emoji";
 
 export default function Home() {
   const [ip, setIp] = useState<number[]>([1, 1, 1, 1]);
   const [emoji, setEmoji] = useState<string[]>([
-    "🤔",
-    "🤔",
-    "🤔",
-    "🤔",
-    "🤔",
-    "🤔",
+    "😀",
+    "👋",
+    "🤐",
+    "🥰",
+    "😀",
+    "👋",
   ]);
+  const lastUpdate = useRef<"ip" | "emoji" | null>(null);
 
   const dict = useMemo(() => {
     const emojis = getEmojis();
@@ -29,14 +30,18 @@ export default function Home() {
     return d;
   }, []);
 
-  const charset = Object.values(dict).map((e) => e.emoji);
+  const charset = useMemo(() => {
+    return Object.values(dict).map((e) => e.emoji);
+  }, [dict]);
 
   // const extras = ["🫠", "🥲", "🤑", "🤔", "🫥", "🤤", "🤯", "🤓", "😭", "💀", "👻", "🕳", "🙏", "💅", "🧠", "👀", "👣", "🍄", "🧭", "🏫", "🗽", "🎢", "🚨", "🚀", "🧳", "⭐", "🌈", "⚡", "🔥"]
 
   useWasm("/main.wasm");
 
-  function updateFromIp() {
-    if (ip.length !== 4) return;
+  useEffect(() => {
+    if (lastUpdate.current !== "ip") return;
+
+    if (ip.length !== 4 || ip.findIndex((i) => isNaN(i)) !== -1) return;
 
     // @ts-ignore
     if (globalThis.encode && ip) {
@@ -53,11 +58,12 @@ export default function Home() {
       const decoded = mappedValues.map((v: number) => charset[v]);
       setEmoji(decoded);
     }
-  }
+  }, [ip, charset]);
 
-  function updateFromEmoji() {
+  useEffect(() => {
+    if (lastUpdate.current !== "emoji") return;
+
     const segmenter = new Intl.Segmenter("en", { granularity: "grapheme" });
-    console.log(emoji);
     const segments = Array.from(segmenter.segment(emoji.join(""))).map(
       (v) => v.segment,
     );
@@ -82,7 +88,7 @@ export default function Home() {
           .join("."),
       );
     }
-  }
+  }, [emoji, charset]);
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-evenly gap-10 bg-e-yellow p-12 font-mono">
@@ -99,7 +105,7 @@ export default function Home() {
             d="M96.4816 2.99732C97.1965 1.76122 98.5162 1 99.9441 1H696.722C699.731 1 701.663 4.198 700.262 6.86157L614.557 169.862C613.865 171.177 612.502 172 611.016 172H5.66797C2.5874 172 0.663081 168.664 2.20543 165.997L96.4816 2.99732Z"
             fill="#FFA9A9"
             stroke="black"
-            stroke-width="2"
+            strokeWidth="2"
           />
         </svg>
         <h1 className="absolute text-7xl">
@@ -120,10 +126,10 @@ export default function Home() {
               min="0"
               max="255"
               onChange={(e) => {
+                lastUpdate.current = "ip";
                 setIp((i) =>
                   i.map((v, i) => (i === 0 ? parseInt(e.target.value) : v)),
                 );
-                updateFromIp();
               }}
             />
             <div className="aspect-square w-2 rounded-full bg-black" />
@@ -135,10 +141,10 @@ export default function Home() {
               min="0"
               max="255"
               onChange={(e) => {
+                lastUpdate.current = "ip";
                 setIp((i) =>
                   i.map((v, i) => (i === 1 ? parseInt(e.target.value) : v)),
                 );
-                updateFromIp();
               }}
             />
             <div className="aspect-square w-2 rounded-full bg-black" />
@@ -150,10 +156,10 @@ export default function Home() {
               min="0"
               max="255"
               onChange={(e) => {
+                lastUpdate.current = "ip";
                 setIp((i) =>
                   i.map((v, i) => (i === 2 ? parseInt(e.target.value) : v)),
                 );
-                updateFromIp();
               }}
             />
             <div className="aspect-square w-2 rounded-full bg-black" />
@@ -165,14 +171,27 @@ export default function Home() {
               min="0"
               max="255"
               onChange={(e) => {
+                lastUpdate.current = "ip";
                 setIp((i) =>
                   i.map((v, i) => (i === 3 ? parseInt(e.target.value) : v)),
                 );
-                updateFromIp();
               }}
             />
           </div>
-          <p className="font-serif text-2xl underline">🧑‍💻 use my ip</p>
+          <button
+            className="font-serif text-2xl underline"
+            onClick={() => {
+              fetch("/get-ip")
+                .then((res) => res.json())
+                .then((data) => {
+                  const ip = data.ip.split(".").map((v: string) => parseInt(v));
+                  lastUpdate.current = "ip";
+                  setIp(ip);
+                });
+            }}
+          >
+            🧑‍💻 use my ip
+          </button>
         </div>
         <div className="flex flex-col items-center justify-evenly gap-2">
           <div className="h-20 w-1 bg-black" />
@@ -189,10 +208,10 @@ export default function Home() {
               value={emoji[0]}
               onChange={(e) => {
                 if (charset.includes(e.target.value) || e.target.value === "") {
+                  lastUpdate.current = "emoji";
                   setEmoji((a) =>
                     a.map((v, i) => (i === 0 ? e.target.value : v)),
                   );
-                  updateFromEmoji();
                 }
               }}
             />
@@ -203,10 +222,10 @@ export default function Home() {
               value={emoji[1]}
               onChange={(e) => {
                 if (charset.includes(e.target.value) || e.target.value === "") {
+                  lastUpdate.current = "emoji";
                   setEmoji((a) =>
                     a.map((v, i) => (i === 1 ? e.target.value : v)),
                   );
-                  updateFromEmoji();
                 }
               }}
             />
@@ -217,10 +236,10 @@ export default function Home() {
               value={emoji[2]}
               onChange={(e) => {
                 if (charset.includes(e.target.value) || e.target.value === "") {
+                  lastUpdate.current = "emoji";
                   setEmoji((a) =>
                     a.map((v, i) => (i === 2 ? e.target.value : v)),
                   );
-                  updateFromEmoji();
                 }
               }}
             />
@@ -231,10 +250,10 @@ export default function Home() {
               value={emoji[3]}
               onChange={(e) => {
                 if (charset.includes(e.target.value) || e.target.value === "") {
+                  lastUpdate.current = "emoji";
                   setEmoji((a) =>
                     a.map((v, i) => (i === 3 ? e.target.value : v)),
                   );
-                  updateFromEmoji();
                 }
               }}
             />
@@ -245,10 +264,10 @@ export default function Home() {
               value={emoji[4]}
               onChange={(e) => {
                 if (charset.includes(e.target.value) || e.target.value === "") {
+                  lastUpdate.current = "emoji";
                   setEmoji((a) =>
                     a.map((v, i) => (i === 4 ? e.target.value : v)),
                   );
-                  updateFromEmoji();
                 }
               }}
             />
@@ -259,10 +278,10 @@ export default function Home() {
               value={emoji[5]}
               onChange={(e) => {
                 if (charset.includes(e.target.value) || e.target.value === "") {
+                  lastUpdate.current = "emoji";
                   setEmoji((a) =>
                     a.map((v, i) => (i === 5 ? e.target.value : v)),
                   );
-                  updateFromEmoji();
                 }
               }}
             />
@@ -326,7 +345,7 @@ function useWasm(path: string) {
           return wasm;
         }
       } catch (e) {
-        console.log(e);
+        console.error(e);
         return {};
       }
     }
