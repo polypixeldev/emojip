@@ -177,6 +177,14 @@ export default function Home() {
                 );
               }}
             />
+            <button
+              className="ml-2 self-center text-3xl"
+              onClick={() => {
+                navigator.clipboard.writeText(ip.join("."));
+              }}
+            >
+              📋️
+            </button>
           </div>
           <button
             className="font-serif text-2xl underline"
@@ -200,91 +208,119 @@ export default function Home() {
         </div>
         <div className="flex flex-col items-center justify-center gap-8">
           <p className="font-display text-4xl">fun em🤪jℹ️ address ✨</p>
-          <div className="grid grid-cols-3 gap-3">
-            <input
-              type="text"
-              placeholder="🤔"
-              className="h-16 w-16 rounded-xl border-2 border-black bg-white text-center text-2xl"
-              value={emoji[0]}
-              onChange={(e) => {
-                if (charset.includes(e.target.value) || e.target.value === "") {
-                  lastUpdate.current = "emoji";
-                  setEmoji((a) =>
-                    a.map((v, i) => (i === 0 ? e.target.value : v)),
-                  );
-                }
+          <div className="flex flex-row items-center justify-start">
+            <div className="grid grid-cols-3 gap-3">
+              <input
+                type="text"
+                placeholder="🤔"
+                className="h-16 w-16 rounded-xl border-2 border-black bg-white text-center text-2xl"
+                value={emoji[0]}
+                onChange={(e) => {
+                  if (
+                    charset.includes(e.target.value) ||
+                    e.target.value === ""
+                  ) {
+                    lastUpdate.current = "emoji";
+                    setEmoji((a) =>
+                      a.map((v, i) => (i === 0 ? e.target.value : v)),
+                    );
+                  }
+                }}
+              />
+              <input
+                type="text"
+                placeholder="🤔"
+                className="h-16 w-16 rounded-xl border-2 border-black bg-white text-center text-2xl"
+                value={emoji[1]}
+                onChange={(e) => {
+                  if (
+                    charset.includes(e.target.value) ||
+                    e.target.value === ""
+                  ) {
+                    lastUpdate.current = "emoji";
+                    setEmoji((a) =>
+                      a.map((v, i) => (i === 1 ? e.target.value : v)),
+                    );
+                  }
+                }}
+              />
+              <input
+                type="text"
+                placeholder="🤔"
+                className="h-16 w-16 rounded-xl border-2 border-black bg-white text-center text-2xl"
+                value={emoji[2]}
+                onChange={(e) => {
+                  if (
+                    charset.includes(e.target.value) ||
+                    e.target.value === ""
+                  ) {
+                    lastUpdate.current = "emoji";
+                    setEmoji((a) =>
+                      a.map((v, i) => (i === 2 ? e.target.value : v)),
+                    );
+                  }
+                }}
+              />
+              <input
+                type="text"
+                placeholder="🤔"
+                className="h-16 w-16 rounded-xl border-2 border-black bg-white text-center text-2xl"
+                value={emoji[3]}
+                onChange={(e) => {
+                  if (
+                    charset.includes(e.target.value) ||
+                    e.target.value === ""
+                  ) {
+                    lastUpdate.current = "emoji";
+                    setEmoji((a) =>
+                      a.map((v, i) => (i === 3 ? e.target.value : v)),
+                    );
+                  }
+                }}
+              />
+              <input
+                type="text"
+                placeholder="🤔"
+                className="h-16 w-16 rounded-xl border-2 border-black bg-white text-center text-2xl"
+                value={emoji[4]}
+                onChange={(e) => {
+                  if (
+                    charset.includes(e.target.value) ||
+                    e.target.value === ""
+                  ) {
+                    lastUpdate.current = "emoji";
+                    setEmoji((a) =>
+                      a.map((v, i) => (i === 4 ? e.target.value : v)),
+                    );
+                  }
+                }}
+              />
+              <input
+                type="text"
+                placeholder="🤔"
+                className="h-16 w-16 rounded-xl border-2 border-black bg-white text-center text-2xl"
+                value={emoji[5]}
+                onChange={(e) => {
+                  if (
+                    charset.includes(e.target.value) ||
+                    e.target.value === ""
+                  ) {
+                    lastUpdate.current = "emoji";
+                    setEmoji((a) =>
+                      a.map((v, i) => (i === 5 ? e.target.value : v)),
+                    );
+                  }
+                }}
+              />
+            </div>
+            <button
+              className="ml-5 self-center text-3xl"
+              onClick={() => {
+                navigator.clipboard.writeText(emoji.join("."));
               }}
-            />
-            <input
-              type="text"
-              placeholder="🤔"
-              className="h-16 w-16 rounded-xl border-2 border-black bg-white text-center text-2xl"
-              value={emoji[1]}
-              onChange={(e) => {
-                if (charset.includes(e.target.value) || e.target.value === "") {
-                  lastUpdate.current = "emoji";
-                  setEmoji((a) =>
-                    a.map((v, i) => (i === 1 ? e.target.value : v)),
-                  );
-                }
-              }}
-            />
-            <input
-              type="text"
-              placeholder="🤔"
-              className="h-16 w-16 rounded-xl border-2 border-black bg-white text-center text-2xl"
-              value={emoji[2]}
-              onChange={(e) => {
-                if (charset.includes(e.target.value) || e.target.value === "") {
-                  lastUpdate.current = "emoji";
-                  setEmoji((a) =>
-                    a.map((v, i) => (i === 2 ? e.target.value : v)),
-                  );
-                }
-              }}
-            />
-            <input
-              type="text"
-              placeholder="🤔"
-              className="h-16 w-16 rounded-xl border-2 border-black bg-white text-center text-2xl"
-              value={emoji[3]}
-              onChange={(e) => {
-                if (charset.includes(e.target.value) || e.target.value === "") {
-                  lastUpdate.current = "emoji";
-                  setEmoji((a) =>
-                    a.map((v, i) => (i === 3 ? e.target.value : v)),
-                  );
-                }
-              }}
-            />
-            <input
-              type="text"
-              placeholder="🤔"
-              className="h-16 w-16 rounded-xl border-2 border-black bg-white text-center text-2xl"
-              value={emoji[4]}
-              onChange={(e) => {
-                if (charset.includes(e.target.value) || e.target.value === "") {
-                  lastUpdate.current = "emoji";
-                  setEmoji((a) =>
-                    a.map((v, i) => (i === 4 ? e.target.value : v)),
-                  );
-                }
-              }}
-            />
-            <input
-              type="text"
-              placeholder="🤔"
-              className="h-16 w-16 rounded-xl border-2 border-black bg-white text-center text-2xl"
-              value={emoji[5]}
-              onChange={(e) => {
-                if (charset.includes(e.target.value) || e.target.value === "") {
-                  lastUpdate.current = "emoji";
-                  setEmoji((a) =>
-                    a.map((v, i) => (i === 5 ? e.target.value : v)),
-                  );
-                }
-              }}
-            />
+            >
+              📋️
+            </button>
           </div>
         </div>
       </div>
