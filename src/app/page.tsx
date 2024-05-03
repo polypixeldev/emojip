@@ -303,7 +303,10 @@ export default function Home() {
         </p>
         <p>
           📦️ check out the{" "}
-          <a href="https://github.com/polypixldev/emojip" className="underline">
+          <a
+            href="https://github.com/polypixeldev/emojip"
+            className="underline"
+          >
             github repo
           </a>
         </p>
